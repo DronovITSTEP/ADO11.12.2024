@@ -27,25 +27,35 @@ namespace ADO11._12._2024.Part2
             @"Data Source=(localdb)\MSSQLLocalDB;
             Initial Catalog=Storage;";
 
-        private const string selectAllInfo = 
-            "select I.Id, P.Name ProductName," +
-            " S.Name SupplierName, " +
-            "T.Name TypeProdName " +
-            "from Products P " +
-            "join Informations I on P.Id = I.ProductId " +
-            "join Suppliers S on I.SuppliersId = S.Id " +
-            "join TypeProducts T on T.Id = I.TypeProductId";
+        private Dictionary<Button, string> selects = null;
+
+
         public MainWindow()
         {
             InitializeComponent();
+            selects = new Dictionary<Button, string>
+            {
+                   [allBtn] = "selectAllInfo",
+                   [typeProductBtn] = "selectTypeProduct",
+                   [supplierBtn] = "selectSupplier",
+                   [minCountBtn] = "minCount",
+                   [maxCountBtn] = "maxCount",
+                   [minPriceBtn] = "minPrice",
+                   [maxPriceBtn] = "maxPrice",
+                   [productByTypeBtn] = "typeProduct",
+                   [productBySupplyBtn] = "supplierProduct",
+                   [oldDateProductBtn] = "oldProduct",
+                   [avgCountProductBtn] = "avgCountProduct"
+            };
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void OpenConnectionButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 connection = new SqlConnection(connectionString);
                 connection.Open();
+                MessageBox.Show("Подключено!");
             }
             catch (Exception ex)
             {
@@ -53,13 +63,32 @@ namespace ADO11._12._2024.Part2
             }
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void showSelectQuery(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            string parameter = null;
+
+            if (btn == productByTypeBtn ||
+                btn == productBySupplyBtn)
+            {
+                parameter = textBox.Text;
+            }
+
+            ReadData(selects[sender as Button], parameter);         
+        }
+        private void ReadData(string query, string parameter)
         {
             if (connection == null) return;
 
             using (SqlCommand command
-                = new SqlCommand(selectAllInfo, connection))
+                = new SqlCommand(query, connection))
             {
+                command.CommandType = CommandType.StoredProcedure;
+
+                if (parameter != null) {
+                    command.Parameters.Add("@inputName", SqlDbType.NVarChar, 20)
+                        .Value = parameter;
+                }
                 SqlDataReader reader = command.ExecuteReader();
                 DataTable table = new DataTable();
                 int line = 0;
@@ -80,10 +109,11 @@ namespace ADO11._12._2024.Part2
                     }
                     table.Rows.Add(row);
                 }
-                dataGrid.ItemsSource = table.DefaultView;
-                MessageBox.Show("Данный выведены. Честное слово");
-            }
 
+                dataGrid.ItemsSource = table.DefaultView;
+                MessageBox.Show("Данные выведены");
+                reader.Close();
+            }
         }
     }
 }

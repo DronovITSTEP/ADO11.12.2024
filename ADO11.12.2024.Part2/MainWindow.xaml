@@ -18,11 +18,27 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Button Content="Открыть подключение" Click="Button_Click" Margin="5"/>
-        <Button Grid.Column="1" Content="Показать все" Margin="5" Click="Button_Click_1"/>
+        <Button Content="Открыть подключение" Click="OpenConnectionButton_Click" Margin="5"/>
+        <Button x:Name="allBtn" Grid.Column="1" Content="Показать все" Margin="5" Click="showSelectQuery"/>
+        <Button x:Name="typeProductBtn" Grid.Column="2" Content="Показать типы продуктов" Margin="5" Click="showSelectQuery"/>
+        <Button x:Name="supplierBtn" Grid.Column="3" Content="Показать поставщиков" Margin="5" Click="showSelectQuery"/>
         
-        <DataGrid x:Name="dataGrid" Grid.Row="2" Grid.ColumnSpan="4" Grid.RowSpan="2"/>
+        <Button x:Name="minCountBtn" Grid.Column="0" Grid.Row="1" Content="Показать продукты с минимальным кол-вом" Margin="5" Click="showSelectQuery"/>
+        <Button x:Name="maxCountBtn" Grid.Column="1" Grid.Row="1" Content="Показать продукты с максимальным кол-вом" Margin="5" Click="showSelectQuery"/>
+        <Button x:Name="minPriceBtn" Grid.Column="2" Grid.Row="1" Content="Показать продукты с минимальной ценой" Margin="5" Click="showSelectQuery"/>
+        <Button x:Name="maxPriceBtn" Grid.Column="3" Grid.Row="1" Content="Показать продукты с максимальной ценой" Margin="5" Click="showSelectQuery"/>
+       
+        <Button x:Name="productByTypeBtn" Grid.Column="0" Grid.Row="2" Content="Показать продукты, заданной категории" Margin="5" Click="showSelectQuery"/>
+        <Button x:Name="productBySupplyBtn" Grid.Column="1" Grid.Row="2" Content="Показать продукты заданноого поставщика" Margin="5" Click="showSelectQuery"/>
+        <Button x:Name="oldDateProductBtn" Grid.Column="2" Grid.Row="2" Content="Показать продукты самые старые" Margin="5" Click="showSelectQuery"/>
+        <Button x:Name="avgCountProductBtn" Grid.Column="3" Grid.Row="2" Content="Показать среднее кол-во продуктов по каждой категории" Margin="5" Click="showSelectQuery"/>
+
+        <TextBox x:Name="textBox" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" Margin="5"/>
+        
+        <DataGrid x:Name="dataGrid" Grid.Row="4" Grid.ColumnSpan="4" Grid.RowSpan="2"/>
     </Grid>
 </Window>
